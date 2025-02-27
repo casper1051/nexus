@@ -4,9 +4,9 @@
 #include <string>
 
 // Robot structure
-int second_right_motor_port = 0;              // Second right motor port. Used for 4 wheel drive.
-int second_left_motor_port = 0;               // Second left motor port.
-bool four_wheel_drive = false;                // If true, drive functions will control the additional motor ports
+int second_right_motor_port = 3;              // Second right motor port. Used for 4 wheel drive.
+int second_left_motor_port = 2;               // Second left motor port.
+bool four_wheel_drive = true;                 // If true, drive functions will control the additional motor ports
 
 // Parameters
 bool shut_down_timer_enabled = false;         // Will the robot automatically stop at the time limit
@@ -83,9 +83,6 @@ inline void drive_with_gyro(int speed, double time, double bias){
     double delta, dev = 0;
 
     while ((seconds() - start_time) < time) {
-        /* You may need to change this factor
-         * depending on how sensitive your gyro is
-         */
         delta = dev / 5;
         mav(right_motor_port, -((-1 * speed) - delta));
         mav(left_motor_port, speed + delta);
@@ -93,6 +90,46 @@ inline void drive_with_gyro(int speed, double time, double bias){
             mav(second_right_motor_port, -((-1 * speed) - delta));
             mav(second_left_motor_port, speed + delta);
         }
+        msleep(10);
+        dev += gyro_z() - bias;
+    }
+
+    ao();
+}
+
+inline void strafe_right_with_gyro(int speed, double time, double bias){
+    double start_time = seconds();
+    double delta, dev = 0;
+
+    while ((seconds() - start_time) < time) {
+        delta = dev / 5;
+        
+        mav(right_motor_port, -((-1 * speed) - delta));
+        mav(second_right_motor_port, ((-1 * speed) - delta));
+     	
+        mav(left_motor_port, speed + delta);
+        mav(second_left_motor_port, -(speed + delta));
+        
+        msleep(10);
+        dev += gyro_z() - bias;
+    }
+
+    ao();
+}
+
+inline void strafe_left_with_gyro(int speed, double time, double bias){
+    double start_time = seconds();
+    double delta, dev = 0;
+
+    while ((seconds() - start_time) < time) {
+        delta = dev / 5;
+        
+        mav(right_motor_port, ((-1 * speed) - delta));
+        mav(second_right_motor_port, -((-1 * speed) - delta));
+     	
+        mav(left_motor_port, -(speed + delta));
+        mav(second_left_motor_port, (speed + delta));
+        
         msleep(10);
         dev += gyro_z() - bias;
     }
