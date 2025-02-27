@@ -97,7 +97,10 @@ inline void drive_with_gyro(int speed, double time){
         msleep(10);
         dev += gyro_z() - bias;
     }
-
+	mav(second_left_motor_port, 0);
+    mav(second_right_motor_port, 0);
+    mav(left_motor_port, 0);
+    mav(right_motor_port, 0);
     ao();
 }
 
@@ -119,6 +122,10 @@ inline void strafe_right_with_gyro(int speed, double time){
         dev += gyro_z() - bias;
     }
 
+	mav(second_left_motor_port, 0);
+    mav(second_right_motor_port, 0);
+    mav(left_motor_port, 0);
+    mav(right_motor_port, 0);
     ao();
 }
 
@@ -140,6 +147,10 @@ inline void strafe_left_with_gyro(int speed, double time){
         dev += gyro_z() - bias;
     }
 
+	mav(second_left_motor_port, 0);
+    mav(second_right_motor_port, 0);
+    mav(left_motor_port, 0);
+    mav(right_motor_port, 0);
     ao();
 }
 
@@ -181,6 +192,10 @@ inline void turn_degrees(float degrees) {
         }
     }
 
+	mav(second_left_motor_port, 0);
+    mav(second_right_motor_port, 0);
+    mav(left_motor_port, 0);
+    mav(right_motor_port, 0);
     ao();
 }
 
