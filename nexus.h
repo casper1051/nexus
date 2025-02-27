@@ -28,7 +28,9 @@ inline void drive_straight(int mpc);          // Abstract drive straight functio
 inline void main_code();                      // Main code execution logic
 inline void turn_degrees(float degrees);      // Turns the robot by a specified number of degrees
 inline double calibrate_gyro_z();             // Calibrate the gyro.
-inline void drive_with_gyro(int speed, double time, double bias); //Drive using the gyro at speed for time with bias
+inline void drive_with_gyro(int speed, double time); //Drive using the gyro at speed for time with bias
+inline void strafe_left_with_gyro(int speed, double time); //Strafes left at speed for time. Meant for 4 wheel bots
+inline void strafe_right_with_gyro(int speed, double time); //Strafes right at speed for time. Meant for 4 wheel bots
 inline void init_camera(const char* config_name); //Init the camera using the config name
 inline void center_on_object(int channel);    // Use the camera to center on object 0 on channel.
 inline void debug_gyro();                     // Debugging function for gyro z-axis
@@ -36,6 +38,7 @@ inline void nexus_init();                     // Init function. Must be called a
 
 // Runtime values
 bool camera_init = false;
+float gyro_bias = 0;
 
 #endif // NEXUS_LIBRARY_H
 
@@ -74,11 +77,12 @@ double calibrate_gyro_z(){
 
     bias = total / iters;
     printf("New Bias: %f\n", bias);
-
+	gyro_bias = bias;
     return bias;
 }
 
-inline void drive_with_gyro(int speed, double time, double bias){
+inline void drive_with_gyro(int speed, double time){
+    double bias = gyro_bias;
     double start_time = seconds();
     double delta, dev = 0;
 
@@ -97,7 +101,8 @@ inline void drive_with_gyro(int speed, double time, double bias){
     ao();
 }
 
-inline void strafe_right_with_gyro(int speed, double time, double bias){
+inline void strafe_right_with_gyro(int speed, double time){
+    double bias = gyro_bias;
     double start_time = seconds();
     double delta, dev = 0;
 
@@ -117,7 +122,8 @@ inline void strafe_right_with_gyro(int speed, double time, double bias){
     ao();
 }
 
-inline void strafe_left_with_gyro(int speed, double time, double bias){
+inline void strafe_left_with_gyro(int speed, double time){
+    double bias = gyro_bias;
     double start_time = seconds();
     double delta, dev = 0;
 
